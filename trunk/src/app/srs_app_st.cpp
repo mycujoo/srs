@@ -143,7 +143,10 @@ void SrsSTCoroutine::stop()
     if (trd) {
         void* res = NULL;
         int r0 = st_thread_join((st_thread_t)trd, &res);
-        srs_assert(!r0);
+        if (!r0) {
+            disposed = false;
+            return;
+        }
 
         srs_error_t err_res = (srs_error_t)res;
         if (err_res != srs_success) {
